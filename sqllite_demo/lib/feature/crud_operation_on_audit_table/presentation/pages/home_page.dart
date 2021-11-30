@@ -1,60 +1,46 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:sqllite_demo/feature/crud_operation_on_audit_table/data/data_sources/drift/audit_table.dart';
+import 'package:sqllite_demo/feature/crud_operation_on_audit_table/presentation/cubit/audit_entity_cubit.dart';
+import 'package:sqllite_demo/feature/crud_operation_on_audit_table/presentation/widgets/audit_item_listview.dart';
 
-class Homepage extends StatefulWidget {
-  const Homepage({Key? key}) : super(key: key);
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
 
   @override
-  _HomepageState createState() => _HomepageState();
+  _HomePageState createState() => _HomePageState();
 }
 
-class _HomepageState extends State<Homepage> {
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 200,
-      child: StreamBuilder(
-        stream: MyDatabase().watchAllOrder(),
-        builder: (context, AsyncSnapshot<List<Order>> snapshot) {
-          MyDatabase().insertNewOrder(Order(
-              price: "200",
-              productName: "car", id: 999,
-          ));
-
-          var datas=snapshot.data;
-          if(datas==null){
-            return ListView.builder(
-              itemBuilder: (_, index) {
-                return Card(
-                  color: Colors.orangeAccent,
-                  child: ListTile(
-                      leading: CircleAvatar(
-                        child: Text('${index + 1}'),
-                        radius: 20,
-                      ),
-                      title: Text("ok"),
-                      subtitle: Text("R}"),
-                      trailing: IconButton(
-                        icon: const Icon(Icons.delete_outline),
-                        onPressed: () {
-                          setState(() {
-
-                          });
-                        },
-                        color: Colors.red,
-                      )),
-                );
-              },
-              itemCount: 3,
-            );
-          }
-          else{
-            return Container();
-          }
-
-        },
+    return SafeArea(
+        child: Scaffold(
+      appBar: AppBar(
+        title: const Text("Audit Entries"),
+        centerTitle: true,
+        backgroundColor: Colors.blueAccent,
       ),
-    );
+      body: BlocBuilder<AuditEntityCubit, AuditEntityState>(
+          builder: (context, state) {
+        if (state is AuditEntityInitial) {
+          BlocProvider.of<AuditEntityCubit>(context).getAuditEntity();
+          return const Center(
+              child: CircularProgressIndicator(
+            color: Colors.blueAccent,
+            strokeWidth: 5,
+          ));
+        } else if (state is AuditEntityLoading) {
+          return const Center(
+              child: CircularProgressIndicator(
+            color: Colors.blueAccent,
+            strokeWidth: 5,
+          ));
+        } else if (state is AuditEntityFailure) {
+          return const Center(child: Text("failed to load the data!!"));
+        } else if (state is AuditEntityLoaded) {
+          return buildAuditItemListView(state.auditData, context);
+        }
+      }),
+    ));
   }
 }

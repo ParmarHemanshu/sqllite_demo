@@ -12,19 +12,26 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.4
+  material_design_icons_flutter:
   drift: ^1.0.1
   dartz: ^0.10.0
   equatable: ^2.0.3
   moor_flutter:
+  flutter_slidable: ^1.1.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^1.0.4
-  moor_generator:
+  moor_generator: any
   build_runner:
+  flutter_bloc:
+  get_it:
 
 flutter:
 
   uses-material-design: true
+  assets:
+    - assets/json/
+
 

@@ -10,21 +10,27 @@ class AuditEntityRepositoryImpl extends AuditEntityRepository {
   AuditEntityRepositoryImpl({required this.auditTableDataSource});
 
   @override
-  Future<Either<Failure, AuditEntityResponse>?>? deleteEntityFromAuditTable() async{
+  Future<Either<Failure, AuditEntityModel>?>? deleteEntityFromAuditTable() async{
     final response = await auditTableDataSource.getDataFromAuditTable();
     return Right(response!);
   }
 
   @override
-  Future<Either<Failure, AuditEntityResponse>?>? getEntriesFromAuditTable() async{
+  Future<Either<Failure, AuditEntityModel>?>? getEntriesFromAuditTable() async{
     final response = await auditTableDataSource.getDataFromAuditTable();
     return Right(response!);
   }
 
   @override
-  Future<Either<Failure, AuditEntityResponse>?>? updateEntityNameInAuditTable() async{
+  Future<Either<Failure, AuditEntityModel>?>? updateEntityNameInAuditTable() async{
     final response = await auditTableDataSource.getDataFromAuditTable();
     return Right(response!);
+  }
+
+  @override
+  Future<void> insertJsonDataIntoAuditTable() {
+    // TODO: implement insertJsonDataIntoAuditTable
+    throw UnimplementedError();
   }
 
 }
