@@ -10,7 +10,7 @@ part of 'audit_table.dart';
 class Audit extends DataClass implements Insertable<Audit> {
   final int audit_id;
   final String audit_entity_name;
-  final DateTime? audit_entity_end_date;
+  final String? audit_entity_end_date;
   Audit(
       {required this.audit_id,
       required this.audit_entity_name,
@@ -23,7 +23,7 @@ class Audit extends DataClass implements Insertable<Audit> {
           .mapFromDatabaseResponse(data['${effectivePrefix}audit_id'])!,
       audit_entity_name: const StringType().mapFromDatabaseResponse(
           data['${effectivePrefix}audit_entity_name'])!,
-      audit_entity_end_date: const DateTimeType().mapFromDatabaseResponse(
+      audit_entity_end_date: const StringType().mapFromDatabaseResponse(
           data['${effectivePrefix}audit_entity_end_date']),
     );
   }
@@ -33,7 +33,7 @@ class Audit extends DataClass implements Insertable<Audit> {
     map['audit_id'] = Variable<int>(audit_id);
     map['audit_entity_name'] = Variable<String>(audit_entity_name);
     if (!nullToAbsent || audit_entity_end_date != null) {
-      map['audit_entity_end_date'] = Variable<DateTime?>(audit_entity_end_date);
+      map['audit_entity_end_date'] = Variable<String?>(audit_entity_end_date);
     }
     return map;
   }
@@ -55,7 +55,7 @@ class Audit extends DataClass implements Insertable<Audit> {
       audit_id: serializer.fromJson<int>(json['audit_id']),
       audit_entity_name: serializer.fromJson<String>(json['audit_entity_name']),
       audit_entity_end_date:
-          serializer.fromJson<DateTime?>(json['audit_entity_end_date']),
+          serializer.fromJson<String?>(json['audit_entity_end_date']),
     );
   }
   @override
@@ -65,14 +65,14 @@ class Audit extends DataClass implements Insertable<Audit> {
       'audit_id': serializer.toJson<int>(audit_id),
       'audit_entity_name': serializer.toJson<String>(audit_entity_name),
       'audit_entity_end_date':
-          serializer.toJson<DateTime?>(audit_entity_end_date),
+          serializer.toJson<String?>(audit_entity_end_date),
     };
   }
 
   Audit copyWith(
           {int? audit_id,
           String? audit_entity_name,
-          DateTime? audit_entity_end_date}) =>
+          String? audit_entity_end_date}) =>
       Audit(
         audit_id: audit_id ?? this.audit_id,
         audit_entity_name: audit_entity_name ?? this.audit_entity_name,
@@ -104,7 +104,7 @@ class Audit extends DataClass implements Insertable<Audit> {
 class AuditsCompanion extends UpdateCompanion<Audit> {
   final Value<int> audit_id;
   final Value<String> audit_entity_name;
-  final Value<DateTime?> audit_entity_end_date;
+  final Value<String?> audit_entity_end_date;
   const AuditsCompanion({
     this.audit_id = const Value.absent(),
     this.audit_entity_name = const Value.absent(),
@@ -118,7 +118,7 @@ class AuditsCompanion extends UpdateCompanion<Audit> {
   static Insertable<Audit> custom({
     Expression<int>? audit_id,
     Expression<String>? audit_entity_name,
-    Expression<DateTime?>? audit_entity_end_date,
+    Expression<String?>? audit_entity_end_date,
   }) {
     return RawValuesInsertable({
       if (audit_id != null) 'audit_id': audit_id,
@@ -131,7 +131,7 @@ class AuditsCompanion extends UpdateCompanion<Audit> {
   AuditsCompanion copyWith(
       {Value<int>? audit_id,
       Value<String>? audit_entity_name,
-      Value<DateTime?>? audit_entity_end_date}) {
+      Value<String?>? audit_entity_end_date}) {
     return AuditsCompanion(
       audit_id: audit_id ?? this.audit_id,
       audit_entity_name: audit_entity_name ?? this.audit_entity_name,
@@ -151,7 +151,7 @@ class AuditsCompanion extends UpdateCompanion<Audit> {
     }
     if (audit_entity_end_date.present) {
       map['audit_entity_end_date'] =
-          Variable<DateTime?>(audit_entity_end_date.value);
+          Variable<String?>(audit_entity_end_date.value);
     }
     return map;
   }
@@ -182,14 +182,14 @@ class $AuditsTable extends Audits with TableInfo<$AuditsTable, Audit> {
   late final GeneratedColumn<String?> audit_entity_name =
       GeneratedColumn<String?>('audit_entity_name', aliasedName, false,
           additionalChecks: GeneratedColumn.checkTextLength(
-              minTextLength: 1, maxTextLength: 35),
+              minTextLength: 1, maxTextLength: 45),
           typeName: 'TEXT',
           requiredDuringInsert: true);
   final VerificationMeta _audit_entity_end_dateMeta =
       const VerificationMeta('audit_entity_end_date');
-  late final GeneratedColumn<DateTime?> audit_entity_end_date =
-      GeneratedColumn<DateTime?>('audit_entity_end_date', aliasedName, true,
-          typeName: 'INTEGER', requiredDuringInsert: false);
+  late final GeneratedColumn<String?> audit_entity_end_date =
+      GeneratedColumn<String?>('audit_entity_end_date', aliasedName, true,
+          typeName: 'TEXT', requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns =>
       [audit_id, audit_entity_name, audit_entity_end_date];

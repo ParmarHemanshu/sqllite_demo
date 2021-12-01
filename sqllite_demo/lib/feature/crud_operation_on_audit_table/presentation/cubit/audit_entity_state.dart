@@ -15,16 +15,16 @@ class AuditEntityLoading extends AuditEntityState {
 }
 
 class AuditEntityLoaded extends AuditEntityState {
-final List<AuditEntityModel> auditData;
+  final List<Audit> auditData;
 
-const AuditEntityLoaded(this.auditData);
+  const AuditEntityLoaded(this.auditData);
 
   @override
   List<Object> get props => [];
 }
 
 class AuditEntityFailure extends AuditEntityState {
-  final errorMsg;
+  final String errorMsg;
 
   const AuditEntityFailure({required this.errorMsg});
 

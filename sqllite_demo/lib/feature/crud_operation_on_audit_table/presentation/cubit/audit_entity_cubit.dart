@@ -1,11 +1,8 @@
-import 'dart:convert';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/services.dart';
 import 'package:sqllite_demo/feature/crud_operation_on_audit_table/data/data_sources/moor/audit_table.dart';
-import 'package:sqllite_demo/feature/crud_operation_on_audit_table/data/models/audit_entity_model.dart';
 import 'package:sqllite_demo/feature/crud_operation_on_audit_table/domain/use_cases/delete_audit_table_entity.dart';
+import 'package:sqllite_demo/feature/crud_operation_on_audit_table/domain/use_cases/get_json_data_from_asset.dart';
 import 'package:sqllite_demo/feature/crud_operation_on_audit_table/domain/use_cases/insert_audit_table_entity.dart';
 import 'package:sqllite_demo/feature/crud_operation_on_audit_table/domain/use_cases/read_audit_table_entries.dart';
 import 'package:sqllite_demo/feature/crud_operation_on_audit_table/domain/use_cases/update_audit_table_entity_name.dart';
@@ -13,47 +10,42 @@ import 'package:sqllite_demo/feature/crud_operation_on_audit_table/domain/use_ca
 part 'audit_entity_state.dart';
 
 class AuditEntityCubit extends Cubit<AuditEntityState> {
-
   final GetEntriesFromAuditTableUseCase getEntriesFromAuditTableUseCase;
   final InsertEntriesInAuditTableUseCase insertEntriesInAuditTableUseCase;
   final DeleteAuditTableEntityUseCase deleteAuditTableEntityUseCase;
   final UpdateEntryInAuditTableUseCase updateEntryInAuditTableUseCase;
+  final GetJsonDataFromAssetUseCase getJsonDataFromAssetUseCase;
 
-  AuditEntityCubit(this.getEntriesFromAuditTableUseCase,
-      this.insertEntriesInAuditTableUseCase,
-      this.deleteAuditTableEntityUseCase,
-      this.updateEntryInAuditTableUseCase)
-      : super(AuditEntityInitial());
-
-
-  //insert entries to audit table
-  readDataFromJsonToAuditTable(AuditDatabase database) async {
-    emit(AuditEntityLoading());
+  AuditEntityCubit(
+      {required this.getEntriesFromAuditTableUseCase,
+      required this.insertEntriesInAuditTableUseCase,
+      required this.deleteAuditTableEntityUseCase,
+      required this.updateEntryInAuditTableUseCase,
+      required this.getJsonDataFromAssetUseCase})
+      : super(AuditEntityInitial()); //insert entries to audit table
+  getDataAuditTableToHomePage() async {
     try {
-      final result = getEntriesFromAuditTableUseCase.call();
-      result!.listen((auditData) async {
+      emit(AuditEntityLoading());
+      final dataFromAuditTable = getEntriesFromAuditTableUseCase.call();
+      dataFromAuditTable!.asStream().listen((auditData) async {
         if (auditData!.length == 0) {
-          final jsonData = await rootBundle.loadString(
-              "assets/json/entity.json");
-          final Map<String, dynamic> map = json.decode(jsonData);
-          final List<dynamic> list = map["auditEntity"];
-          for (int i = 0; i < list.length; i++) {
-            var auditId = map["auditEntity"][i]["AuditEntityId"];
-            var auditName = map["auditEntity"][i]["AuditEntityName"];
-            var auditEndDate = map["auditEntity"][i]["EntityEndDate"];
-            database.insertNewEntry(AuditsCompanion(
-                audit_id: auditId,
-                audit_entity_name: auditName,
-                audit_entity_end_date: auditEndDate));
-            await insertAuditEntityUsecase.call(auditData);
+          final List<Audit>? dataListFromJsonFile =
+              await getJsonDataFromAssetUseCase.call();
+          for (int i = 0; i < dataListFromJsonFile!.length; i++) {
+            final model = Audit(
+                audit_id: dataListFromJsonFile[i].audit_id,
+                audit_entity_name: dataListFromJsonFile[i].audit_entity_name,
+                audit_entity_end_date:
+                    dataListFromJsonFile[i].audit_entity_end_date);
+            await insertEntriesInAuditTableUseCase(model);
           }
         } else {
-          emit(AuditEntityLoaded(auditData));
+          emit(AuditEntityLoaded(dataFromAuditTable));
         }
-      }}
-          catch (e)
-      {
-        emit(const AuditEntityFailure(errorMsg: "Something went wrong!!"));
-      }
+      });
+    } catch (e) {
+      emit(const AuditEntityFailure(
+          errorMsg: 'Error while fetching data from Audit Table..!!'));
     }
+  }
 }

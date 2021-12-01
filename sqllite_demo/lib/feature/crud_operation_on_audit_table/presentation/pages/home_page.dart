@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sqllite_demo/feature/crud_operation_on_audit_table/presentation/cubit/audit_entity_cubit.dart';
 import 'package:sqllite_demo/feature/crud_operation_on_audit_table/presentation/widgets/audit_item_listview.dart';
 
@@ -15,32 +16,33 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-      appBar: AppBar(
-        title: const Text("Audit Entries"),
-        centerTitle: true,
-        backgroundColor: Colors.blueAccent,
-      ),
-      body: BlocBuilder<AuditEntityCubit, AuditEntityState>(
-          builder: (context, state) {
-        if (state is AuditEntityInitial) {
-          BlocProvider.of<AuditEntityCubit>(context).getAuditEntity();
-          return const Center(
-              child: CircularProgressIndicator(
-            color: Colors.blueAccent,
-            strokeWidth: 5,
-          ));
-        } else if (state is AuditEntityLoading) {
-          return const Center(
-              child: CircularProgressIndicator(
-            color: Colors.blueAccent,
-            strokeWidth: 5,
-          ));
-        } else if (state is AuditEntityFailure) {
-          return const Center(child: Text("failed to load the data!!"));
-        } else if (state is AuditEntityLoaded) {
-          return buildAuditItemListView(state.auditData, context);
-        }
-      }),
-    ));
+            appBar: AppBar(
+              title: const Text("Audit Entries"),
+              centerTitle: true,
+              backgroundColor: Colors.blueAccent,
+            ),
+            body: _buildBody()));
   }
+}
+
+_buildBody() {
+  BlocBuilder<AuditEntityCubit, AuditEntityState>(builder: (context, state) {
+    if (state is AuditEntityInitial) {
+      return const Center(
+          child: CircularProgressIndicator(
+        color: Colors.blueAccent,
+        strokeWidth: 5,
+      ));
+    } else if (state is AuditEntityLoading) {
+      return const Center(
+          child: CircularProgressIndicator(
+        color: Colors.blueAccent,
+        strokeWidth: 5,
+      ));
+    } else if (state is AuditEntityLoaded) {
+      return buildAuditItemListView(state.auditData, context);
+    } else {
+      return const Center(child: Text("failed to load the data!!"));
+    }
+  });
 }

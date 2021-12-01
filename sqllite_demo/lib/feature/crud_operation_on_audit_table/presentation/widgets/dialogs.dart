@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:sqllite_demo/feature/crud_operation_on_audit_table/data/data_sources/moor/audit_table.dart';
+import 'package:bloc/bloc.dart';
 import 'package:moor_flutter/moor_flutter.dart' as moor;
+import 'package:sqllite_demo/feature/crud_operation_on_audit_table/data/data_sources/moor/audit_table.dart';
 import 'package:sqllite_demo/feature/crud_operation_on_audit_table/presentation/cubit/audit_entity_cubit.dart';
 
 displayUpdateDialog(BuildContext context, List<dynamic> dataItem) async {
@@ -22,12 +23,13 @@ displayUpdateDialog(BuildContext context, List<dynamic> dataItem) async {
               onPressed: () {
                 var title = _auditTitleController.text.trim();
                 if (title.isNotEmpty) {
-                  BlockProvider.of<AuditEntityCubit>(context).updateEntity(AuditsCompanion(
-                audit_entity_name: moor.Value(title),
-                ))
-                    .whenComplete(() => _goBackToHomePage(context));
+                  BlockProvider.of<AuditEntityCubit>(context)
+                      .updateEntity(AuditsCompanion(
+                        audit_entity_name: moor.Value(title),
+                      ))
+                      .whenComplete(() => _goBackToHomePage(context));
                 }
-                },
+              },
             ),
             ElevatedButton(
               child: const Text('Cancel'),
@@ -40,7 +42,6 @@ displayUpdateDialog(BuildContext context, List<dynamic> dataItem) async {
       });
 }
 
-
 displayDeleteDialog(BuildContext context, List<dynamic> dataItem) async {
   return showDialog(
       context: context,
@@ -52,8 +53,9 @@ displayDeleteDialog(BuildContext context, List<dynamic> dataItem) async {
             ElevatedButton(
               child: const Text('Delete'),
               onPressed: () {
-                BlockProvider.of<AuditEntityCubit>(context).deleteEntity(dataItem).whenComplete(() => _goBackToHomePage(context)
-                );
+                BlockProvider.of<AuditEntityCubit>(context)
+                    .deleteEntity(dataItem)
+                    .whenComplete(() => _goBackToHomePage(context));
               },
             ),
             ElevatedButton(

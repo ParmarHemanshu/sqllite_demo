@@ -2,16 +2,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:sqllite_demo/feature/crud_operation_on_audit_table/data/data_sources/moor/audit_table.dart';
 import 'package:sqllite_demo/feature/crud_operation_on_audit_table/data/models/audit_entity_model.dart';
 
 import 'dialogs.dart';
 
 Widget buildAuditItemListView(
-    List<AuditEntityModel> data, BuildContext context) {
+    List<Audit> data, BuildContext context) {
   return ListView.builder(
     itemCount: data.length,
     itemBuilder: (BuildContext context, int index) {
-      Slidable(
+      return Slidable(
         endActionPane: ActionPane(motion: const ScrollMotion(), children: [
           SlidableAction(
             // An action can be bigger than the others.

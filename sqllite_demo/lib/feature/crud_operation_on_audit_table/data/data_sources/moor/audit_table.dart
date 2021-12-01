@@ -1,13 +1,14 @@
 import 'package:moor_flutter/moor_flutter.dart';
+import 'package:sqllite_demo/feature/crud_operation_on_audit_table/data/models/audit_entity_model.dart';
 
 part 'audit_table.g.dart';
 
 class Audits extends Table {
   IntColumn get audit_id => integer().autoIncrement()();
 
-  TextColumn get audit_entity_name => text().withLength(min: 1,max: 35)();
+  TextColumn get audit_entity_name => text().withLength(min: 1,max: 45)();
 
-  DateTimeColumn get audit_entity_end_date => dateTime().nullable()();
+  TextColumn get audit_entity_end_date => text().nullable()();
 }
 
 @UseMoor(tables: [Audits])
@@ -22,7 +23,7 @@ class AuditDatabase extends _$AuditDatabase {
 
   Stream<List<Audit>> watchAllEntries() => select(audits).watch();
 
-  Future insertNewEntry(AuditsCompanion audit) => into(audits).insert(audit);
+  Future<int> insertNewEntry(Audit audit) => into(audits).insert(audit);
 
   Future deleteEntity(Audit audit) => delete(audits).delete(audit);
 

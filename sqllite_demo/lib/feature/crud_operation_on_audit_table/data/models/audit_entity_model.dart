@@ -19,7 +19,7 @@ class AuditEntityModel extends AuditEntityItem {
 
   factory AuditEntityModel.fromJson(Map<String, dynamic> json) =>
       AuditEntityModel(
-          AuditEntityId: json["id"] ?? "",
+          AuditEntityId: json["id"] ,
           AuditEntityName: json["name"] ?? "unknown",
           EntityEndDate: json["date"] ?? "unknown");
 
