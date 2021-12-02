@@ -5,7 +5,7 @@ import 'package:sqllite_demo/feature/crud_operation_on_audit_table/data/data_sou
 abstract class AuditEntityRepository {
 
   //listen to all audit table entries
-  Stream<List<Audit>?>? watchEntriesOfAuditTable();
+  Stream<List<Audit>?> watchEntriesOfAuditTable();
 
   //read all data from assets/json/entity.json file
   Future<List<Audit>?>? getJsonDataFromAsset();

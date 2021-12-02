@@ -21,28 +21,28 @@ class _HomePageState extends State<HomePage> {
               centerTitle: true,
               backgroundColor: Colors.blueAccent,
             ),
-            body: _buildBody()));
+            body:  BlocBuilder<AuditEntityCubit, AuditEntityState>(builder: (context, state) {
+              if (state is AuditEntityInitial) {
+                print("entered init state");
+                BlocProvider.of<AuditEntityCubit>(context).getDataAuditTableToHomePage();
+                return const Center(
+                    child: CircularProgressIndicator(
+                      color: Colors.blueAccent,
+                      strokeWidth: 5,
+                    ));
+              } else if (state is AuditEntityLoading) {
+                print("entered loading state");
+                return const Center(
+                    child: CircularProgressIndicator(
+                      color: Colors.blueAccent,
+                      strokeWidth: 5,
+                    ));
+              } else if (state is AuditEntityLoaded) {
+                return buildAuditItemListView(state.auditData, context);
+              } else {
+                return const Center(child: Text("failed to load the data!!"));
+              }
+            })));
   }
 }
 
-_buildBody() {
-  BlocBuilder<AuditEntityCubit, AuditEntityState>(builder: (context, state) {
-    if (state is AuditEntityInitial) {
-      return const Center(
-          child: CircularProgressIndicator(
-        color: Colors.blueAccent,
-        strokeWidth: 5,
-      ));
-    } else if (state is AuditEntityLoading) {
-      return const Center(
-          child: CircularProgressIndicator(
-        color: Colors.blueAccent,
-        strokeWidth: 5,
-      ));
-    } else if (state is AuditEntityLoaded) {
-      return buildAuditItemListView(state.auditData, context);
-    } else {
-      return const Center(child: Text("failed to load the data!!"));
-    }
-  });
-}

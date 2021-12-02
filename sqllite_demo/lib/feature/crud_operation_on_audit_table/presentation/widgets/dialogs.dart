@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moor_flutter/moor_flutter.dart' as moor;
 import 'package:sqllite_demo/feature/crud_operation_on_audit_table/data/data_sources/moor/audit_table.dart';
 import 'package:sqllite_demo/feature/crud_operation_on_audit_table/presentation/cubit/audit_entity_cubit.dart';
 
-displayUpdateDialog(BuildContext context, List<dynamic> dataItem) async {
+displayUpdateDialog(BuildContext context, Audit auditItem) async {
   TextEditingController _auditTitleController = TextEditingController();
   return showDialog(
       context: context,
@@ -23,8 +23,8 @@ displayUpdateDialog(BuildContext context, List<dynamic> dataItem) async {
               onPressed: () {
                 var title = _auditTitleController.text.trim();
                 if (title.isNotEmpty) {
-                  BlockProvider.of<AuditEntityCubit>(context)
-                      .updateEntity(AuditsCompanion(
+                  BlocProvider.of<AuditEntityCubit>(context)
+                      .updateEntityFromAuditTable(AuditsCompanion(
                         audit_entity_name: moor.Value(title),
                       ))
                       .whenComplete(() => _goBackToHomePage(context));
@@ -42,7 +42,7 @@ displayUpdateDialog(BuildContext context, List<dynamic> dataItem) async {
       });
 }
 
-displayDeleteDialog(BuildContext context, List<dynamic> dataItem) async {
+displayDeleteDialog(BuildContext context, Audit auditItem) async {
   return showDialog(
       context: context,
       builder: (context) {
@@ -53,8 +53,8 @@ displayDeleteDialog(BuildContext context, List<dynamic> dataItem) async {
             ElevatedButton(
               child: const Text('Delete'),
               onPressed: () {
-                BlockProvider.of<AuditEntityCubit>(context)
-                    .deleteEntity(dataItem)
+                BlocProvider.of<AuditEntityCubit>(context)
+                    .deleteEntityFromAuditTable(auditItem)
                     .whenComplete(() => _goBackToHomePage(context));
               },
             ),

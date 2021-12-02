@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:dartz/dartz.dart';
+
 import 'package:flutter/services.dart' as root_bundle;
 import 'package:sqllite_demo/feature/crud_operation_on_audit_table/data/data_sources/audit_table_data_source.dart';
 import 'package:sqllite_demo/feature/crud_operation_on_audit_table/data/data_sources/moor/audit_table.dart';
@@ -32,7 +32,7 @@ class AuditTableDataSourceImpl extends AuditTableDataSource {
   }
 
   @override
-  Stream<List<Audit>?>? watchDataFromAuditTable() {
+  Stream<List<Audit>?> watchDataFromAuditTable() {
     return auditDB.watchAllEntries();
   }
 
@@ -46,19 +46,19 @@ class AuditTableDataSourceImpl extends AuditTableDataSource {
       final List<dynamic> list = map["auditEntity"];
       var resultList = <Audit>[];
       for (int i = 0; i < list.length; i++) {
-        var auditId = map["auditEntity"][i]["AuditEntityId"];
-        var auditName = map["auditEntity"][i]["AuditEntityName"];
-        var auditEndDate = map["auditEntity"][i]["EntityEndDate"];
+        var auditId = list[i]["AuditEntityId"];
+        var auditName = list[i]["AuditEntityName"];
+        var auditEndDate = list[i]["EntityEndDate"];
         resultList.add(Audit(
             audit_id: auditId,
             audit_entity_name: auditName,
             audit_entity_end_date: auditEndDate));
       }
-      return (resultList);
+    print(resultList);
+      return resultList;
     } on Exception catch (e) {
-
        const AuditEntityFailure(errorMsg: "Unable to read data from asset");
-       print(e);
+       print("eeror ");
     }
   }
 }

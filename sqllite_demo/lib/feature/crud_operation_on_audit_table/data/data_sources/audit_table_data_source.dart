@@ -6,7 +6,7 @@ import 'package:sqllite_demo/feature/crud_operation_on_audit_table/presentation/
 
 abstract class AuditTableDataSource {
   //listen to all audit table entries
-  Stream<List<Audit>?>? watchDataFromAuditTable();
+  Stream<List<Audit>?> watchDataFromAuditTable();
 
   //reading all entities from audit table
   Future<List<Audit>?>? getDataFromAuditTable();

@@ -36,13 +36,13 @@ class AuditEntityRepositoryImpl extends AuditEntityRepository {
 
   @override
   Future<List<Audit>?>? getJsonDataFromAsset() async {
-    final response = await auditTableDataSource.getDataFromAuditTable();
+    final response = await auditTableDataSource.getJsonDataFromAsset();
     return (response!);
   }
 
   @override
-  Stream<List<Audit>?>? watchEntriesOfAuditTable() async* {
+  Stream<List<Audit>?> watchEntriesOfAuditTable() async* {
     final response = auditTableDataSource.watchDataFromAuditTable();
-    yield* response!;
+    yield* response;
   }
 }

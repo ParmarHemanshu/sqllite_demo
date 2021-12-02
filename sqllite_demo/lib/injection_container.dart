@@ -9,6 +9,7 @@ import 'package:sqllite_demo/feature/crud_operation_on_audit_table/domain/use_ca
 import 'package:sqllite_demo/feature/crud_operation_on_audit_table/domain/use_cases/insert_audit_table_entity.dart';
 import 'package:sqllite_demo/feature/crud_operation_on_audit_table/domain/use_cases/read_audit_table_entries.dart';
 import 'package:sqllite_demo/feature/crud_operation_on_audit_table/domain/use_cases/update_audit_table_entity_name.dart';
+import 'package:sqllite_demo/feature/crud_operation_on_audit_table/domain/use_cases/watch_audit_table_data.dart';
 
 import 'feature/crud_operation_on_audit_table/presentation/cubit/audit_entity_cubit.dart';
 
@@ -31,6 +32,10 @@ Future<void> init() async {
   sl.registerLazySingleton<GetJsonDataFromAssetUseCase>(
       () => GetJsonDataFromAssetUseCase(auditEntityRepository: sl.call()));
 
+  //usecase
+  sl.registerLazySingleton<WatchAuditTableDataUseCase>(
+          () => WatchAuditTableDataUseCase(auditEntityRepository: sl.call()));
+
   //repository
   sl.registerLazySingleton<AuditEntityRepository>(
       () => AuditEntityRepositoryImpl(auditTableDataSource: sl.call()));
@@ -48,5 +53,8 @@ Future<void> init() async {
       getEntriesFromAuditTableUseCase: sl.call(),
       getJsonDataFromAssetUseCase: sl.call(),
       deleteAuditTableEntityUseCase: sl.call(),
-      updateEntryInAuditTableUseCase: sl.call()));
+      updateEntryInAuditTableUseCase: sl.call(),
+    watchAuditTableDataUseCase: sl.call()
+
+  ));
 }
