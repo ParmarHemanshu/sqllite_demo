@@ -33,14 +33,14 @@ class AuditEntityCubit extends Cubit<AuditEntityState> {
     try {
 
       final dataFromAuditTable = watchAuditTableDataUseCase.call();
-      print("dataFromAuditTable  .."+dataFromAuditTable.toString());
+     
       dataFromAuditTable.listen((auditData) async {
-        print("auditdata  .."+auditData.toString());
+
         if (auditData!.length==0) {
 
           final  dataListFromJsonFile =
               await getJsonDataFromAssetUseCase.call();
-          print("dataListFromJsonFile"+dataListFromJsonFile.toString());
+
           for (int i = 0; i < dataListFromJsonFile!.length; i++) {
             final model = Audit(
                 audit_id: dataListFromJsonFile[i].audit_id,

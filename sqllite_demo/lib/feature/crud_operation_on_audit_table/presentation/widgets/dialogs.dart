@@ -5,7 +5,7 @@ import 'package:moor_flutter/moor_flutter.dart' as moor;
 import 'package:sqllite_demo/feature/crud_operation_on_audit_table/data/data_sources/moor/audit_table.dart';
 import 'package:sqllite_demo/feature/crud_operation_on_audit_table/presentation/cubit/audit_entity_cubit.dart';
 
-displayUpdateDialog(BuildContext context, Audit auditItem) async {
+displayUpdateDialog(BuildContext context) async {
   TextEditingController _auditTitleController = TextEditingController();
   return showDialog(
       context: context,

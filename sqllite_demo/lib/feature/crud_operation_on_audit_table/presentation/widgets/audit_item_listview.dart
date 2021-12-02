@@ -16,7 +16,7 @@ Widget buildAuditItemListView(List<Audit> auditList, BuildContext context) {
             // An action can be bigger than the others.
             flex: 1,
             onPressed: (context) {
-              displayUpdateDialog(context, auditList[index]);
+              displayUpdateDialog(context);
             },
             backgroundColor: const Color(0xFF7BC043),
             foregroundColor: Colors.white,
