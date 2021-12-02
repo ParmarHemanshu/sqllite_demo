@@ -16,6 +16,7 @@ import 'feature/crud_operation_on_audit_table/presentation/cubit/audit_entity_cu
 final sl = GetIt.instance;
 
 Future<void> init() async {
+  
   //usecase
   sl.registerLazySingleton<DeleteAuditTableEntityUseCase>(
       () => DeleteAuditTableEntityUseCase(auditEntityRepository: sl.call()));

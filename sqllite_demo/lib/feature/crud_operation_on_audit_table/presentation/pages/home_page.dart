@@ -21,7 +21,7 @@ class _HomePageState extends State<HomePage> {
               centerTitle: true,
               backgroundColor: Colors.blueAccent,
             ),
-            body:  BlocBuilder<AuditEntityCubit, AuditEntityState>(builder: (context, state) {
+            body: BlocBuilder<AuditEntityCubit, AuditEntityState>(builder: (context, state) {
               if (state is AuditEntityInitial) {
                 print("entered init state");
                 BlocProvider.of<AuditEntityCubit>(context).getDataAuditTableToHomePage();
